@@ -9,3 +9,5 @@ services:
       DISCORD_TOKEN: ${DISCORD_TOKEN:?DISCORD_TOKEN is required}
       PORT: ${PORT:-28812}
     restart: unless-stopped
+    ports:
+      - "${PORT:-28812}:${PORT:-28812}"
