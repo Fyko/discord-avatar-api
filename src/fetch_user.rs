@@ -33,6 +33,7 @@ pub async fn fetch_user(client: Arc<Client>, id: Id<UserMarker>) -> Result<User,
     Ok(user)
 }
 
+/// The formats that a user's avatar can be returned in.
 pub enum UserAvatarFormats {
     Png,
     Jpg,

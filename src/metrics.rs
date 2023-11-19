@@ -8,6 +8,7 @@ use metrics_exporter_prometheus::{Matcher, PrometheusBuilder, PrometheusHandle};
 
 use crate::state::AppState;
 
+/// The routes for the `metrics` module.
 pub fn routes() -> Router<AppState> {
     let recorder_handle = setup_metrics_recorder();
     Router::new().route("/metrics", get(move || ready(recorder_handle.render())))
@@ -28,6 +29,7 @@ fn setup_metrics_recorder() -> PrometheusHandle {
         .unwrap()
 }
 
+/// Middleware to track metrics for requests.
 pub async fn track_metrics<B>(req: Request<B>, next: Next<B>) -> impl IntoResponse {
     let start = Instant::now();
     let path = if let Some(matched_path) = req.extensions().get::<MatchedPath>() {

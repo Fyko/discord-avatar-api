@@ -19,9 +19,11 @@ pub struct QueryParams {
     size: Option<i16>,
 }
 
+/// regex that matches
 static REGEX: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^(?<id>\d{17,19})(\.(?<format>png|webp|jpeg|gif))?$").unwrap());
 
+/// Handles an avatar query
 #[axum::debug_handler]
 pub async fn handle_query(
     State(state): State<AppState>,
@@ -35,9 +37,8 @@ pub async fn handle_query(
         return (StatusCode::BAD_REQUEST, "Invalid size").into_response();
     }
 
-    let caps = match REGEX.captures(&full_path) {
-        Some(caps) => caps,
-        None => return (StatusCode::BAD_REQUEST, "Invalid path").into_response(),
+    let Some(caps) = REGEX.captures(&full_path) else {
+        return (StatusCode::BAD_REQUEST, "Invalid path").into_response();
     };
 
     let id = caps.name("id").map_or("", |m| m.as_str());
@@ -45,13 +46,16 @@ pub async fn handle_query(
         return (StatusCode::BAD_REQUEST, "Invalid id").into_response();
     }
 
-    let user_id = match Id::<UserMarker>::from_str(id) {
-        Ok(id) => id,
-        Err(_) => return (StatusCode::BAD_REQUEST, "Invalid user ID").into_response(),
+    let Ok(user_id) = Id::<UserMarker>::from_str(id) else {
+        return (StatusCode::BAD_REQUEST, "Invalid user ID").into_response();
     };
-    let user = match fetch_user(state.discord_client.clone(), user_id).await {
-        Ok(user) => user,
-        Err(res) => return res,
+
+    let Ok(user) = fetch_user(state.discord_client.clone(), user_id).await else {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Failed to fetch user from Discord",
+        )
+            .into_response();
     };
 
     let format = caps.name("format");

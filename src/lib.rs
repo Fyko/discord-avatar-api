@@ -44,6 +44,7 @@ pub mod request_id;
 pub mod routes;
 pub mod state;
 
+/// Creates the router and middleware for the application.
 pub fn create_router(state: AppState) -> Router<()> {
     let timeout_layer = ServiceBuilder::new()
         .layer(HandleErrorLayer::new(|e: BoxError| async move {
@@ -107,6 +108,7 @@ pub fn create_router(state: AppState) -> Router<()> {
     Router::new().merge(routes(state)).layer(middleware)
 }
 
+/// Merges all the routes
 fn routes(state: AppState) -> Router<()> {
     Router::new()
         .merge(metrics::routes())
@@ -116,6 +118,7 @@ fn routes(state: AppState) -> Router<()> {
         .with_state(state)
 }
 
+/// Displays the info for root (/)
 #[axum::debug_handler]
 async fn display_info() -> impl IntoResponse {
     let content = indoc::indoc! {r#"
