@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  app:
+    image: ghcr.io/fyko/discord-avatar-api:latest
+    environment:
+      RUST_LOG: ${RUST_LOG:-info}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:?DISCORD_TOKEN is required}
+      PORT: ${PORT:-28812}
+    restart: unless-stopped
