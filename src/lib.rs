@@ -10,6 +10,7 @@ use axum::{
     extract::MatchedPath,
     http::{HeaderName, Request},
     middleware,
+    response::IntoResponse,
     routing::{any, get},
     BoxError, Error, Router,
 };
@@ -109,13 +110,18 @@ pub fn create_router(state: AppState) -> Router<()> {
 fn routes(state: AppState) -> Router<()> {
     Router::new()
         .merge(metrics::routes())
-        .route("/health", get(debug))
+        .route("/health", any(display_info))
         .route("/*path", get(handle_query))
-        .route("/", any(debug))
+        .route("/", any(display_info))
         .with_state(state)
 }
 
 #[axum::debug_handler]
-async fn debug() -> &'static str {
-    "Hello, World!"
+async fn display_info() -> impl IntoResponse {
+    indoc::indoc! {r#"
+        {
+            "info": "discord-avatar-api provide a simple API to fetch user's avatar from Discord. Find out more at https://github.com/Fyko/discord-avatar-api",
+            "discord_invite": "https://discord.com/invite/HnyYTnQzJW",
+        }
+    "#}
 }

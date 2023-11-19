@@ -45,6 +45,7 @@ regex = "1.10.2"
 metrics-exporter-prometheus = "0.12.1"
 metrics = "0.21.1"
 lazy_static = "1.4.0"
+indoc = "2.0.4"
 
 [profile.release]
 strip = true
