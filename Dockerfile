@@ -1,5 +1,5 @@
 ARG TARGET=x86_64-unknown-linux-musl
-ARG BINARY_NAME=rust-template
+ARG BINARY_NAME=discord-avatar-api
 
 FROM --platform=$TARGETPLATFORM clux/muslrust:1.73.0 AS chef
 ARG TARGET

@@ -28,6 +28,10 @@ impl ToString for Environment {
 pub struct Config {
     /// The environment the application is running in
     pub environment: Environment,
+    /// The Discord Token to query users with
+    pub discord_token: String,
+    /// The port to run the server on
+    pub port: u16,
 }
 
 impl Config {

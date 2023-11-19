@@ -5,4 +5,7 @@ services:
     build: .
     environment:
       RUST_LOG: ${RUST_LOG:-info}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      DISCORD_TOKEN: ${DISCORD_TOKEN:?DISCORD_TOKEN is required}
+      PORT: ${PORT:-28812}
     restart: unless-stopped

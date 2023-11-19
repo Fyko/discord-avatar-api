@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  slug: ghcr.io/fyko/rust-template
+  slug: ghcr.io/fyko/discord-avatar-api
   dockerfile: ./Dockerfile
 
 jobs:
