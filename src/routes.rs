@@ -19,8 +19,7 @@ pub struct QueryParams {
     size: Option<i16>,
 }
 
-#[allow(clippy::borrow_interior_mutable_const)]
-const REGEX: Lazy<Regex> =
+static REGEX: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^(?<id>\d{17,19})(\.(?<format>png|webp|jpeg|gif))?$").unwrap());
 
 #[axum::debug_handler]
