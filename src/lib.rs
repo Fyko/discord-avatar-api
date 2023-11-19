@@ -12,9 +12,9 @@ use axum::{
     middleware,
     response::IntoResponse,
     routing::{any, get},
-    BoxError, Error, Router,
+    BoxError, Error, Json, Router,
 };
-use http::StatusCode;
+use http::{header, StatusCode};
 use metrics::track_metrics;
 use request_id::MyRequestId;
 use routes::handle_query;
@@ -118,10 +118,12 @@ fn routes(state: AppState) -> Router<()> {
 
 #[axum::debug_handler]
 async fn display_info() -> impl IntoResponse {
-    indoc::indoc! {r#"
+    let content = indoc::indoc! {r#"
         {
             "info": "discord-avatar-api provide a simple API to fetch user's avatar from Discord. Find out more at https://github.com/Fyko/discord-avatar-api",
             "discord_invite": "https://discord.com/invite/HnyYTnQzJW",
         }
-    "#}
+    "#};
+
+    Json(content)
 }
